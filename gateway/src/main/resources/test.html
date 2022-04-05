@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+</head>
+<body>
+
+<button id="btn" type="button">点击访问</button>
+</body>
+<script>
+
+    $("#btn").click(function(){
+        console.log('发起请求-----------')
+        $.get("http://192.168.0.4:9008/stock-service/stock/deduct",function(data,status){
+            alert("数据：" + data + "\n状态：" + status);
+        });
+    });
+
+</script>
+</html>

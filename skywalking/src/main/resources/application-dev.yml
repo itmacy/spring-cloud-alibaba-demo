@@ -1,0 +1,31 @@
+server:
+  port: 9009
+spring:
+  application:
+    name: skywalking-service
+  cloud:
+    nacos: # nacos服务注册与发现
+      server-addr: 127.0.0.1:8848 # nacos服务器地址
+    gateway: # gateway配置
+      routes:
+        - id: order_route # 路由的唯一标识
+          uri: lb://stock-service # 需要转发到的地址,lb:使用nacos中本地负载均衡策略，stock-service:需要转发的服务名
+          predicates: # 断言规则，用于路由规则的匹配
+            - Path=/stock-service/**
+            # 例如由http://localhost:9008/stock-service/stock/deduct 路由到👇
+            # http://localhost:9100/stock-service/stock/deduct
+          filters:
+            - StripPrefix=1 # 转发之前去除第一层路径
+            # http://localhost:9100/stock/deduct
+        - id: order_openfeign_route # 路由的唯一标识
+          uri: lb://order-openfeign # 需要转发到的地址,lb:使用nacos中本地负载均衡策略
+          predicates: # 断言规则，用于路由规则的匹配
+            - Path=/order-openfeign/**
+          filters:
+            - StripPrefix=1 # 转发之前去除第一层路径
+        - id: order_seata_route # 路由的唯一标识
+          uri: lb://order-seata # 需要转发到的地址,lb:使用nacos中本地负载均衡策略
+          predicates: # 断言规则，用于路由规则的匹配
+            - Path=/order-seata/**
+          filters:
+            - StripPrefix=1 # 转发之前去除第一层路径

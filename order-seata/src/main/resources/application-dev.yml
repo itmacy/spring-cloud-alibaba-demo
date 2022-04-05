@@ -1,0 +1,57 @@
+server:
+  port: 9006
+spring:
+  application:
+    name: order-seata
+  # 数据库
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      db-type: com.alibaba.druid.pool.DruidDataSource
+      url: jdbc:mysql://localhost:3306/macy_alibaba_demo?useUnicode=true&useSSL=false&characterEncoding=utf-8&autoReconnect=true&serverTimezone=GMT%2B8
+      username: root
+      password: root
+    schema: classpath:sql/undo_log.sql # 初始化时表结构
+    initialization-mode: never  # always每次都会自动生成,never从不，第一次生成表时需要改为always
+  # jpa
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+        generateDdl: false
+        format_sql: false
+  cloud:
+    nacos: # nacos注册发现配置
+      server-addr: 127.0.0.1:8848
+      discovery:
+        username: nacos
+        password: nacos
+        namespace: public # 命名空间，默认是public
+        group: DEFAULT_GROUP # 分组，默认是DEFAULT_GROUP
+        #        ephemeral: false # 是否是临时实例，默认为true,当修改为false也就是永久实例时，即使挂了，也不会从服务列表删除
+        service: ${spring.application.name} # 注册到nacos的服务名
+    alibaba:
+      seata:
+        tx-service-group: my_test_tx_group  # 设置seata事务分组，与seata服务端seata/script/config-center/service.vgroupMapping.my_test_tx_group=default一致
+seata:
+  registry:
+    # 配置seata的注册中心，告诉seata client 怎么去访问seata server
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848 # nacos服务器地址
+      application: seata-server # seata server的服务名，默认是seata-server，没有修改可以不配
+      username: nacos
+      password: nacos
+      group: SEATA_GROUP # seata分组，默认是SEATA_GROUP，没有修改可以不配
+  config:
+    # 配置seata的配置中心，可以读取seata client的一些配置
+    type: nacos
+    nacos:
+      server-addr: 127.0.0.1:8848
+      username: nacos
+      password: nacos
+      group: SEATA_GROUP # seata分组，默认是SEATA_GROUP，没有修改可以不配

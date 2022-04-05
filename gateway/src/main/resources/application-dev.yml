@@ -1,0 +1,41 @@
+server:
+  port: 9008
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    nacos: # nacos服务注册与发现
+      server-addr: 127.0.0.1:8848 # nacos服务器地址
+    gateway: # gateway配置
+      routes:
+        - id: order_route # 路由的唯一标识
+          uri: lb://stock-service # 需要转发到的地址,lb:使用nacos中本地负载均衡策略，stock-service:需要转发的服务名
+          predicates: # 断言规则，用于路由规则的匹配
+            - Path=/stock-service/**
+            # 例如由http://localhost:9008/stock-service/stock/deduct 路由到👇
+            # http://localhost:9100/stock-service/stock/deduct
+          filters:
+            - StripPrefix=1 # 转发之前去除第一层路径
+            # http://localhost:9100/stock/deduct
+#      discovery:
+#        locator:
+#          enabled: true # 开启自动识别nacos服务，就不需要再配置routes
+      # 跨域配置
+#      globalcors:
+#        cors-configurations:
+#          '[/**]': # 允许跨域的资源
+#            allowedOrigins: "*" # 跨域的来源
+#            allowedMethods:
+#              - GET
+#              - POST
+#              - DELETE
+#              - PUT
+#              - OPTION
+    sentinel:
+      transport:
+        dashboard: 127.0.0.1:9090 # 配置sentinel dashboard地址
+      # 自定义异常
+#      scg:
+#        fallback:
+#          mode: response
+#          response-body: '{"code": 403, "message": "限流了"}'

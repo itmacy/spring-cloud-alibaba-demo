@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: config-nacos
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+        # 注册中心配置
+      config:
+        # nacso控制台dataId默认支持的是properties文件
+        file-extension: yaml  # 修改读取的文件后缀为yaml
+        shared-configs: # 加载自定义的拓展文件，一般用于读取公共的配置文件，后读取的优先级更高
+          - data-id: com.itmacy.dev.common1.yaml # 自定义的dataId
+            refresh: true # 动态感知刷新
+#            group: DEFAULT_GROUP # 默认分组
+          - data-id: com.itmacy.dev.common2.yaml # 自定义的dataId
+            refresh: true # 动态感知刷新
+#            group: DEFAULT_GROUP # 默认分组

@@ -1,0 +1,33 @@
+server:
+  port: 9002
+spring:
+  application:
+    name: order-openfeign
+  # nacos注册发现配置
+  cloud:
+    nacos:
+      server-addr: 127.0.0.1:8848
+      discovery:
+        username: nacos
+        password: nacos
+        namespace: public # 命名空间，默认是public
+        group: DEFAULT_GROUP # 分组，默认是DEFAULT_GROUP
+#        ephemeral: false # 是否是临时实例，默认为true,当修改为false也就是永久实例时，即使挂了，也不会从服务列表删除
+        service: ${spring.application.name} # 注册到nacos的服务名
+# springboot默认的日志级别是info,feign的debug日志级别就不会显示，因此需要修改日志级别
+logging:
+  level: # debug # 配在这里是全局配置
+    com.itmacy.dev.feign: debug # 局部配置，针对某个包
+
+# feign日志的局部配置
+feign:
+  client:
+    config:
+      stock-service:  # 针对该服务的设置
+        loggerLevel: FULL # 日志级别：NONE、BASIC、HEADERS、FULL
+        # 指定feign原生注解锲约配置，用于支持spring cloud 1的feign功能
+#        contract: feign.Contract.Default
+        # 连接远程服务的超时时间，默认是2s
+        connectTimeout: 5000
+        # 请求处理超时时间，默认是5s
+        readTimeout: 10000

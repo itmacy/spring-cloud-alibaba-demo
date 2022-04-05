@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <packaging>pom</packaging>
+    <modules>
+        <module>order-nacos</module>
+        <module>stock-nacos</module>
+        <module>order-openfeign</module>
+        <module>order-ribbon</module>
+        <module>config-nacos</module>
+        <module>order-openfeign-sentinel</module>
+        <module>order-seata</module>
+        <module>product-seata</module>
+        <module>gateway</module>
+        <module>skywalking</module>
+    </modules>
+<!--    <parent>-->
+<!--        <groupId>org.springframework.boot</groupId>-->
+<!--        <artifactId>spring-boot-starter-parent</artifactId>-->
+<!--        <version>2.6.5</version>-->
+<!--        <relativePath/> &lt;!&ndash; lookup parent from repository &ndash;&gt;-->
+<!--    </parent>-->
+    <groupId>com.itmacy</groupId>
+    <artifactId>springcloud-alibaba-demo</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <name>springcloud-alibaba-demo</name>
+    <description>springcloud-alibaba-demo</description>
+    <properties>
+        <java.version>1.8</java.version>
+        <spring.boot.starter.parent>2.3.12.RELEASE</spring.boot.starter.parent>
+        <spring.cloud.alibaba.dependencies>2.2.7.RELEASE</spring.cloud.alibaba.dependencies>
+        <spring.cloud.dependencies>Hoxton.SR12</spring.cloud.dependencies>
+        <spring.boot.maven.plugin>2.3.12.RELEASE</spring.boot.maven.plugin>
+    </properties>
+    <dependencies>
+        <!-- springboot 基本场景启动，子项目不需要显示声明-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.20</version>
+        </dependency>
+    </dependencies>
+    <!-- 子项目需要显示声明-->
+    <dependencyManagement>
+        <dependencies>
+            <!-- springboot 版本管理器-->
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-parent</artifactId>
+                <version>${spring.boot.starter.parent}</version>
+                <!--  加上这两个属性，可以不以parent的方式让子maven继承-->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <!-- spring cloud alibaba版本管理里-->
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.cloud.alibaba.dependencies}</version>
+                <!--  加上这两个属性，可以不以parent的方式让子maven继承-->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud.dependencies}</version>
+                <!--  加上这两个属性，可以不以parent的方式让子maven继承-->
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-maven-plugin -->
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot.maven.plugin}</version>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

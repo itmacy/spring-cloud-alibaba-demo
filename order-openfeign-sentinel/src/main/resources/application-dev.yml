@@ -1,0 +1,30 @@
+server:
+  port: 9005
+spring:
+  application:
+    name: order-openfeign-sentinel
+  cloud:
+    nacos: # nacos注册发现配置
+      server-addr: 127.0.0.1:8848
+      discovery:
+        username: nacos
+        password: nacos
+        namespace: public # 命名空间，默认是public
+        group: DEFAULT_GROUP # 分组，默认是DEFAULT_GROUP
+#        ephemeral: false # 是否是临时实例，默认为true,当修改为false也就是永久实例时，即使挂了，也不会从服务列表删除
+        service: ${spring.application.name} # 注册到nacos的服务名
+    sentinel: # 配置sentinel dashboard服务器地址
+      transport:
+        dashboard: 127.0.0.1:9090
+      datasource:  # 配置sentinel持久化
+        flow-rule: # 可以自定义
+          nacos: # 从nacos拉取数据到sentinel
+            server-addr: 127.0.0.1:8848 # nacos服务器地址
+            username: nacos
+            password: nacos
+            data-id: order-sentinel-flow-rule # 在控制台配置的dataId
+            data-type: json # 默认json格式，因此在控制台配置时选择JSON
+            rule-type: flow # 规则类型：流控
+feign:
+  sentinel:
+    enabled: true # 添加feign对sentinel的支持
